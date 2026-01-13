@@ -1,0 +1,2 @@
+# traductor
+Traductor de Juegos
