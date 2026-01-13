@@ -10,6 +10,7 @@ from dxcam import create as dxcam_create
 import cv2
 
 import styles
+import ocr
 
 
 class ImageSaver(QRunnable):
@@ -185,6 +186,12 @@ class CaptureWindow(QMainWindow):
                 saver = ImageSaver(frame)
                 self.thread_pool.start(saver)
                 logging.info("Captura realizada y delegada al guardado en background.")
+                try:
+                    # Start OCR in background (modular worker in ocr.py)
+                    ocr_worker = ocr.OCRWorker(frame)
+                    self.thread_pool.start(ocr_worker)
+                except Exception:
+                    logging.exception("No se pudo iniciar OCR en background")
             else:
                 logging.warning("Frame vacío durante la captura")
         except Exception:
